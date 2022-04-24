@@ -102,10 +102,8 @@ There is a known issue for pyatv if you have configured a Homepod to be the defa
 # Get Play State
   # A
   /homebridge/appletv_control.sh Get "Apple TV Play State" "On"
-
   # B
   atvremote --id 90:DD:5D:AA:AA:AA --airplay-credentials `cat /homebridge/atv_airplay.cred` --companion-credentials `cat /homebridge/atv_companion.cred` playing
-
 # Get Power State
   # A
   /homebridge/appletv_control.sh Get "Apple TV Power" "On"
