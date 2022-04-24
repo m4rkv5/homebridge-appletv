@@ -95,6 +95,24 @@ atvremote --id AA:BB:CC:DD:EE:FF --protocol companion pair
 
 There is a known issue for pyatv if you have configured a Homepod to be the default audio output. In this case, you will always get the power to be ON ([postlund/pyatv#1667](https://github.com/postlund/pyatv/issues/1667)).
 
+## Debug
+```
+# Get Movie State
+/homebridge/appletv_control.sh Get "Apple TV Movie State" "On"
+# Get Play State
+  # A
+  /homebridge/appletv_control.sh Get "Apple TV Play State" "On"
+
+  # B
+  atvremote --id 90:DD:5D:AA:AA:AA --airplay-credentials `cat /homebridge/atv_airplay.cred` --companion-credentials `cat /homebridge/atv_companion.cred` playing
+
+# Get Power State
+  # A
+  /homebridge/appletv_control.sh Get "Apple TV Power" "On"
+  # B
+  atvremote --id 90:DD:5D:AA:AA:AA --airplay-credentials `cat /homebridge/atv_airplay.cred` --companion-credentials `cat /homebridge/atv_companion.cred` power_state
+```
+
 ## Many thanks to
 - [pyatv](https://github.com/postlund/pyatv)
 - [homebridge-cmd4](https://github.com/ztalbot2000/homebridge-cmd4)
