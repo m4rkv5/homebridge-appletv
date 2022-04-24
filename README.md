@@ -47,8 +47,6 @@ atvremote --id AA:BB:CC:DD:EE:FF --protocol airplay pair
 atvremote --id AA:BB:CC:DD:EE:FF --protocol companion pair
 ```
 
-- Install [homebridge-cmd4](https://github.com/ztalbot2000/homebridge-cmd4) plugin.
-
 #### Shell script `appletv_control.sh`
 
 - Place the script file inside the folder `/homebridge/`
@@ -57,7 +55,10 @@ atvremote --id AA:BB:CC:DD:EE:FF --protocol companion pair
 - Change airplay_credentials with the credentials given when pairing with the Apple TV
 - Change companion_credentials with the credentials given when pairing with the Apple TV
 
-## Homebridge-cmd4 plugin configuration
+## Homebridge-cmd4 plugin
+
+- Install [homebridge-cmd4](https://github.com/ztalbot2000/homebridge-cmd4) plugin.
+
 ```
 {
     "platform": "Cmd4",
