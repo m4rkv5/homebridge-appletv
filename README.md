@@ -1,22 +1,61 @@
 # homebridge-appletv
-Configuration of pyatv and homebridge-cmd4 for reading the Apple TV status in Homebridge.
+Docker Configuration of pyatv and homebridge-cmd4 for reading the Apple TV status in Homebridge.
+
+
+## Docker Compose 
+
+Add the following Environment variables:
+- PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/homebridge/python/bin
+- PYTHONPATH=/homebridge/python
+
+```docker
+version: '2'
+services:
+  homebridge:
+    image: oznu/homebridge:ubuntu
+    restart: always
+    network_mode: host
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8581
+      - TZ=Europe/Berlin
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/homebridge/python/bin
+      - PYTHONPATH=/homebridge/python
+    volumes:
+      - ./data:/homebridge
+```
 
 ## Installation
-- Install [pyatv](https://github.com/postlund/pyatv) and pair with the Apple TV.
+Enter console
+
 ```
-$ pip3 install pyatv
-$ /home/pi/.local/bin/atvremote scan
-$ /home/pi/.local/bin/atvremote --id AA:BB:CC:DD:EE:FF --protocol airplay pair
-$ /home/pi/.local/bin/atvremote --id AA:BB:CC:DD:EE:FF --protocol companion pair
+docker exec -it $CONTAINERNAME /bin/bash
+```
+
+#### pyatv
+
+```bash
+mkdir /homebridge/python
+pip3 install --upgrade pip
+pip3 install --target /homebridge/python cryptography
+pip3 install --target /homebridge/python pyatv
+
+atvremote scan
+atvremote --id AA:BB:CC:DD:EE:FF --protocol airplay pair
+atvremote --id AA:BB:CC:DD:EE:FF --protocol companion pair
 ```
 
 - Install [homebridge-cmd4](https://github.com/ztalbot2000/homebridge-cmd4) plugin.
 
-## Upgrade
-- Upgrade [pyatv](https://github.com/postlund/pyatv) when new version is released.
-```
-pip3 install --upgrade pyatv
-```
+#### Shell script `appletv_control.sh`
+
+- Place the script file inside the folder `/homebridge/`
+- Set the script as executable with the command `chmod +x /homebridge/appletv_control.sh`
+- Change ATV_id with the ID of your Apple TV
+- Change airplay_credentials with the credentials given when pairing with the Apple TV
+- Change companion_credentials with the credentials given when pairing with the Apple TV
 
 ## Homebridge-cmd4 plugin configuration
 ```
@@ -30,13 +69,13 @@ pip3 install --upgrade pyatv
     "queueTypes": [
         {
             "queue": "A",
-            "queueType": "WoRm"
+            "queueType": "Sequential"
         }
     ],
     "accessories": [
         {
             "type": "Switch",
-            "displayName": "Apple TV Power",
+            "displayName": "Apple TV Movie State",
             "on": "FALSE",
             "queue": "A",
             "polling": [
@@ -44,31 +83,12 @@ pip3 install --upgrade pyatv
                     "characteristic": "on"
                 }
             ],
-            "state_cmd": "bash /var/lib/homebridge/appletv_control.sh"
-        },
-        {
-            "type": "Switch",
-            "displayName": "Apple TV Play State",
-            "on": "FALSE",
-            "queue": "A",
-            "polling": [
-                {
-                    "characteristic": "on"
-                }
-            ],
-            "state_cmd": "bash /var/lib/homebridge/appletv_control.sh"
+            "state_cmd": "bash /homebridge/appletv_control.sh"
         }
-   
+    ]
 }
 ```
 
-## Shell script `appletv_control.sh`
-
-- Place the script file inside the folder `/var/lib/homebridge/`
-- Set the script as executable with the command `chmod +x /var/lib/homebridge/appletv_control.sh`
-- Change ATV_id with the ID of your Apple TV
-- Change airplay_credentials with the credentials given when pairing with the Apple TV
-- Change companion_credentials with the credentials given when pairing with the Apple TV
 
 ## Known issues
 
@@ -77,3 +97,4 @@ There is a known issue for pyatv if you have configured a Homepod to be the defa
 ## Many thanks to
 - [pyatv](https://github.com/postlund/pyatv)
 - [homebridge-cmd4](https://github.com/ztalbot2000/homebridge-cmd4)
+- [cristian5th/homebridge-appletv/](https://github.com/cristian5th/homebridge-appletv/)
