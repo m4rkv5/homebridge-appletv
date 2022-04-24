@@ -11,7 +11,7 @@ device=""
 io=""
 characteristic=""
 option=""
-ATV_id="90:DD:5D:AAa:AA:AA"
+ATV_id="90:DD:5D:AA:AA:AA"
 airplay_credentials=""
 companion_credentials=""
 
